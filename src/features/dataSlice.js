@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    objectId: 10245,
+    objectId: 2050,
     apiData: {}
 }
 
@@ -12,7 +12,7 @@ export const dataSlice = createSlice({
         setData: (state, action) => {
             return {...state, apiData : action.payload}
         },
-        clearData: () => {
+        reset: () => {
             return initialState
         },
         inputId: (state, action) => {
@@ -27,16 +27,16 @@ export const dataSlice = createSlice({
     }
 })
 
-export const { setData, clearData, incrementId, decrementId, inputId } = dataSlice.actions
+export const { setData, reset, incrementId, decrementId, inputId } = dataSlice.actions
 
 export const fetchData = () => {
-    const fetchDataThunk = async (dispatch, getState) => {
+    const dataThunk = async (dispatch, getState) => {
         let state = getState()
-        const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${state.data.objectId}`)
-        const rData = await response.json()
-        dispatch(setData(rData))
+        const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${state.data.objectId}`)
+        const resData = await res.json()
+        dispatch(setData(resData))
     }
-    return fetchDataThunk
+    return dataThunk
 }
 
 export default dataSlice.reducer
